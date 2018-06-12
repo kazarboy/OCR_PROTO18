@@ -47,6 +47,7 @@ namespace OCR_Prototype.Controllers
             string convertpath = "";
             string filenamenoext = "";
             string fileext = "";
+            string relativepath = "";
             List<int> ResultFormID = new List<int>();
             int DocID = 0;
             var docpage = new List<InsertformInfo>();
@@ -65,7 +66,7 @@ namespace OCR_Prototype.Controllers
                     filenamenoext = Path.GetFileNameWithoutExtension(file.FileName);
                     fileName = Path.GetFileName(file.FileName);
                     fileext = Path.GetExtension(file.FileName);
-                    path = Path.Combine(Server.MapPath("~/Images/"), fileName);
+                    path = Path.Combine(Server.MapPath("~/Content/Images/"), fileName);
 
                     //Save File to destination folder
                     file.SaveAs(path);
@@ -84,18 +85,20 @@ namespace OCR_Prototype.Controllers
                         {
                             PdfToImage.PDFConvert pp = new PDFConvert();
                             pp.OutputFormat = "jpeg"; //format
-                            pp.JPEGQuality = 80; //100% quality
+                            pp.JPEGQuality =100; //100% quality
                             pp.ResolutionX = 300; //dpi
                             pp.ResolutionY = 300;
                             pp.FirstPageToConvert = i; //pages you want
-                            pp.LastPageToConvert = 2;
-                            convertpath = Path.Combine(Server.MapPath("~/Images/"), "name_pg" + i + ".jpeg");
+                            pp.LastPageToConvert = totalpageno;
+                            convertpath = Path.Combine(Server.MapPath("~/Content/Images/"), filenamenoext + "_pg" + i + ".jpeg");
+                            relativepath = "~/Content/Images/"+ filenamenoext + "_pg" + i + ".jpeg";
                             pp.Convert(path, convertpath);
 
                             docpage.Add(new InsertformInfo
                             {
                                 pageNo = i,
-                                docpathref = convertpath
+                                docpathref = relativepath,
+                                physicalpath = convertpath
                             });
                         }
                     }
@@ -105,7 +108,8 @@ namespace OCR_Prototype.Controllers
                         docpage.Add(new InsertformInfo
                         {
                             pageNo = 1,
-                            docpathref = path
+                            docpathref = relativepath,
+                            physicalpath = convertpath
                         });
                     }
 
@@ -147,6 +151,7 @@ namespace OCR_Prototype.Controllers
             var CropRes = new List<OCRModel.CropResult>();
             int i = 0;
             string croppath = "";
+            string relativecrop = "";
             Bitmap croppedImage;
 
             for (int j = 1; j <= totalpage; j++)
@@ -159,7 +164,7 @@ namespace OCR_Prototype.Controllers
                     {
                         j--;
                         // Here we capture the resource - image file.
-                        using (var originalImage = new Bitmap(imagePath[j].docpathref))
+                        using (var originalImage = new Bitmap(imagePath[j].physicalpath))
                         {
                             //Set Position {x1,y1,width,height}
                             Rectangle crop = new Rectangle(CropPos[i].pos_X1, CropPos[i].pos_Y1, CropPos[i].pos_width, CropPos[i].pos_height);
@@ -171,19 +176,32 @@ namespace OCR_Prototype.Controllers
 
                         // At this point the file on disk already free - you can record to the same path.
                         //croppedImage.Save(@"C:\Users\kazarboys\Source\Repos\How-to-use-tesseract-ocr-4.0-with-csharp\tesseract-master.1153\samples\crop.jpg", ImageFormat.Jpeg);
-                        croppath = Path.Combine(Server.MapPath("~/Images/Crop"), name + "" + formID[j] + "_crop_" + i + ".jpg");
+                        croppath = Path.Combine(Server.MapPath("~/Content/Images/crop"), name + "" + formID[j] + "_crop_" + i + ".jpg");
+                        relativecrop = "~/Content/Images/crop/" +name + "" + formID[j] + "_crop_" + i + ".jpg";
                         croppedImage.Save(croppath, ImageFormat.Jpeg);
 
-                        var Ocr = new AutoOcr();
+                        /*var Ocr = new AutoOcr();
                         var OcrResult = Ocr.Read(croppath);
-                        Console.WriteLine(OcrResult.Text);
+                        Console.WriteLine(OcrResult.Text);*/
+
+                        var Ocr = new AdvancedOcr()
+                        {
+                            CleanBackgroundNoise = false,
+                            ColorDepth = 4,
+                            ColorSpace = AdvancedOcr.OcrColorSpace.Color,
+                            EnhanceContrast = false,
+                            DetectWhiteTextOnDarkBackgrounds = false,
+                            RotateAndStraighten = false,
+                            Strategy = AdvancedOcr.OcrStrategy.Advanced
+                        };
+                        var OcrResult = Ocr.Read(croppath);
 
                         //string Crop_Text = OcrResult.Text.Replace("\r\n", "\\r\\n"); 
 
                         CropRes.Add(new OCRModel.CropResult
                         {
                             FormID_Key = formID[j],
-                            Crop_Imgpath = croppath.ToString(),
+                            Crop_Imgpath = relativecrop.ToString(),
                             Crop_Text = OcrResult.ToString().Replace("\r\n", "\\r\\n")
                         });
 
@@ -205,6 +223,7 @@ namespace OCR_Prototype.Controllers
             var CropRes = new List<OCRModel.CropResult>();
 
             string croppath = "";
+            string relativecrop = "";
             Bitmap croppedImage;
 
             for (int i = 0; i < CropPos.Count; i++)
@@ -222,7 +241,8 @@ namespace OCR_Prototype.Controllers
 
                 // At this point the file on disk already free - you can record to the same path.
                 //croppedImage.Save(@"C:\Users\kazarboys\Source\Repos\How-to-use-tesseract-ocr-4.0-with-csharp\tesseract-master.1153\samples\crop.jpg", ImageFormat.Jpeg);
-                croppath = Path.Combine(Server.MapPath("~/Images/Crop"), name + "" + formID + "_crop_" + i + ".jpg");
+                croppath = Path.Combine(Server.MapPath("~/Content/Images/crop"), name + "" + formID + "_crop_" + i + ".jpg");
+                relativecrop = "~/Content/Images/crop/" + name + "" + formID + "_crop_" + i + ".jpg";
                 croppedImage.Save(croppath, ImageFormat.Jpeg);
 
                 var Ocr = new AutoOcr();
@@ -234,7 +254,7 @@ namespace OCR_Prototype.Controllers
                 CropRes.Add(new OCRModel.CropResult
                 {
                     FormID_Key = formID,
-                    Crop_Imgpath = croppath.ToString(),
+                    Crop_Imgpath = relativecrop.ToString(),
                     Crop_Text = OcrResult.ToString().Replace("\r\n", "\\r\\n")
                 });
 

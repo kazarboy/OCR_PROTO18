@@ -1,8 +1,8 @@
-﻿#thumbwrap {
+﻿thumbwrap {
     position: relative;
-    margin: 75px auto;
-    width: 200px;
-    height: 200px;
+    margin: 55px auto;
+    width: 100px;
+    height: 100px;
 }
 
 .thumb img {
@@ -19,7 +19,6 @@
 .thumb:hover, .thumb:hover span {
     visibility: visible;
     top: 0;
-    left: 250px;
-    z-index: 1;
+    left: 100px;
+    z-index:1;
 }
-

@@ -48,6 +48,7 @@ namespace OCR_Prototype.Models
         {
             public int pageNo { get; set; }
             public string docpathref { get; set; }
+            public string physicalpath { get; set; }
         }
     
 

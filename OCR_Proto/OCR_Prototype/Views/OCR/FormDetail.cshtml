@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<OCR_Prototype.Models.OCRModel.getDetails>
-@Styles.Render("/Content/hover.css")
+
 @{
     /**/
     ViewBag.Title = "FormDetail";
@@ -74,6 +74,17 @@
                                             <div class="col-5">
                                                 @Html.TextArea("ID " + i, itemcrop.Crop_Text, new { @class = "form-control" })
                                             </div>
+                                            <!--<div class="col-2">
+                                                <i class="fa fa-camera-retro fa-2x"></i>
+                                            </div>-->
+                                            <div class="col-2">
+                                                <div id="thumbwrap">
+                                                    <a class="thumb" href="#"><i class="fa fa-camera-retro fa-2x"></i><span><img src=@Url.Content(itemcrop.Crop_Imgpath) alt=""></span></a>
+                                                </div>
+                                            </div>
+                                            <!--<div class="col-2">
+                                                <img src=Url.Content(itemcrop.Crop_Imgpath) alt="">
+                                            </div>-->
                                         </div>
                                         i++;
                                     }
