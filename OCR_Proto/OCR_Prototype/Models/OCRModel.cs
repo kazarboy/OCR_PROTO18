@@ -131,7 +131,8 @@ namespace OCR_Prototype.Models
                     for (int i = 0; i < formpath.Count; i++)
                     {
 
-                        sql = "INSERT INTO Form_Image VALUES (@ImgId,@ImgRef,@Imgpath,@Cre_Date,@Cre_By,@pageno); SELECT SCOPE_IDENTITY()";
+                        sql = "INSERT INTO Form_Image VALUES (@ImgId,@ImgRef,@Imgpath,@Cre_Date,@Cre_By,@pageno); SELECT SCOPE_IDENTITY()";                       
+
 
                         using (SqlCommand cmd = new SqlCommand(sql, conn))
                         {
@@ -298,7 +299,7 @@ namespace OCR_Prototype.Models
                 try
                 {
                     conn.Open();
-                    sqlBox = "SELECT A.[ID],A.[Form_Reference],A.[page_no],A.[Form_Path],B.[Crop_Imgpath],B.[Crop_Text] FROM [Form_Image] A INNER JOIN [Form_ImageCrop] B ON A.ID = B.FormID_key where A.Form_Reference = '" + FormImgid + "'";
+                    sqlBox = "SELECT A.[ID],A.[Form_Reference],A.[pageno],A.[Form_Path],B.[Crop_Imgpath],B.[Crop_Text] FROM [Form_Image] A INNER JOIN [Form_ImageCrop] B ON A.ID = B.FormID_key where A.Form_Reference = '" + FormImgid + "'";
 
                     using (SqlCommand cmd = new SqlCommand(sqlBox, conn))
                     {
@@ -313,6 +314,48 @@ namespace OCR_Prototype.Models
                                 Form_Path = reader.GetString(3),
                                 Crop_Imgpath = reader.GetString(4),
                                 Crop_Text = reader.GetString(5)
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ex.ToString();
+                }
+                finally
+                {
+                    con.Close();
+                }
+                return DetailList;
+            }
+        }
+
+        //Chai: added to get upload images
+        public List<getDetails> getOriFile(string FormImgid)
+        {
+            var DetailList = new List<getDetails>();
+            string sqlBox = null;
+
+            string constring = ConfigurationManager.ConnectionStrings["OCRDB"].ToString();
+            con = new SqlConnection(constring);
+
+            using (SqlConnection conn = new SqlConnection(constring))
+            {
+                try
+                {
+                    conn.Open();
+                    sqlBox = "SELECT [ID],[Form_Reference],[Form_Path] FROM [Form_Image] where Form_Reference = '" + FormImgid + "'";
+
+                    using (SqlCommand cmd = new SqlCommand(sqlBox, conn))
+                    {
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            DetailList.Add(new getDetails
+                            {
+                                ID = reader.GetInt32(0),
+                                Reference = reader.GetString(1),
+                                Form_Path = reader.GetString(2),
                             });
                         }
                     }

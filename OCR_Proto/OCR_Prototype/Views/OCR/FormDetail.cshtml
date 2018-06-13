@@ -26,8 +26,15 @@
                     <div class="col-1">
                         @Html.Label("Reference")
                     </div>
-                    <div class="col-5">
+                    <div class="col-4">
                         @Html.TextBox("refer", refer, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <div class="col-1">
+                        <a class="btn btn-dark" href="#"
+                           onclick="window.open('/OCR/OriginalFile?item_id=@refer',
+                         'newwindow',
+                         'width=800,height=950');
+                          return false;">Show Uploaded File</a>
                     </div>
                 </div>
             </div>
@@ -50,13 +57,13 @@
                                 <div class="col-1">
                                     @Html.Label("ID")
                                 </div>
-                                <div class="col-4">
+                                <div class="col-3">
                                     @Html.TextBox("refID", refID, new { @class = "form-control", @readonly = "readonly" })
                                 </div>
                                 <div class="col-offset-1 col-1">
                                     @Html.Label("Page Number")
                                 </div>
-                                <div class="col-4">
+                                <div class="col-1">
                                     @Html.TextBox("pageno", num, new { @class = "form-control", @readonly = "readonly" })
                                 </div>
                             </div>

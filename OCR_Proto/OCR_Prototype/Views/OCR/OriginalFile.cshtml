@@ -1,0 +1,41 @@
+﻿@model IEnumerable<OCR_Prototype.Models.OCRModel.getDetails>
+
+@{
+    Layout = null;
+    ViewBag.Title = "Uploaded File";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - New Page Design</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/font-awesome-4.7.0/css/font-awesome.css")
+    @Styles.Render("~/Content/hover.css")
+
+</head>
+<body>
+    <h2>Uploaded File</h2>
+    @foreach (var item in Model)
+    {
+        <p>
+            <img id="upload-file" src=@Url.Content(item.Form_Path.Replace(" ", "%20")) style="max-width:100%; max-height:100%;" class="img-fluid" />
+        </p>
+    }
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    
+
+    @*<script type="text/javascript">
+        $(document).ready(function () {
+            notes = [{ "x1": "10", "y1": "10", "height": "150", "width": "50", "note": "This is a note" }, { "x1": "25", "y1": "25", "height": "70", "width": "80", "note": "<b>This</b> is a new note This is another note This is a new note" }];
+            //initial image select
+            $('#upload-file').imgNotes();
+            //$('#upload-file').imgAreaSelect({ x1: 220, y1: 90, x2: 280, y2: 210 });
+        });
+    </script>*@
+</body>
+</html>

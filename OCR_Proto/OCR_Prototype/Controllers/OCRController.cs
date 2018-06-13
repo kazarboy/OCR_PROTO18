@@ -40,7 +40,7 @@ namespace OCR_Prototype.Controllers
         }
 
         [HttpPost]
-        public ActionResult UploadImg()
+        public ActionResult UploadImg(int DocID)
         {
             string path = "";
             string fileName = "";
@@ -49,11 +49,11 @@ namespace OCR_Prototype.Controllers
             string fileext = "";
             string relativepath = "";
             List<int> ResultFormID = new List<int>();
-            int DocID = 0;
+            //int DocID = 0;
             var docpage = new List<InsertformInfo>();
             int totalpageno = 0;
 
-            DocID = Convert.ToInt32(Request.Form["DDlDoc"].ToString());
+            //DocID = Convert.ToInt32(Request.Form["DDlDoc"].ToString());
 
             OCRModel imgpath = new OCRModel();
 
@@ -141,7 +141,9 @@ namespace OCR_Prototype.Controllers
             {
 
             }
-            return RedirectToAction("Upload");
+            //return RedirectToAction("Upload");
+            return PartialView("_SystemMessage");
+
         }
 
         public void cropImage_ConvertMulti(List<OCRModel.Position> CropPos, List<InsertformInfo> imagePath, string name, List<int> formID, int totalpage)
@@ -263,6 +265,15 @@ namespace OCR_Prototype.Controllers
             }
 
             imgpath.InsertCropResult(CropRes);
+
+        }
+
+        //Chai: added to get upload images
+        public ActionResult OriginalFile(string item_id)
+        {
+            OCRModel getDetailResult = new OCRModel();
+
+            return View(getDetailResult.getOriFile(item_id));
 
         }
 
