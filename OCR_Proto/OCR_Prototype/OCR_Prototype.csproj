@@ -169,6 +169,8 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\hover.css" />
+    <Content Include="Content\imgareaselect-animated.css" />
+    <Content Include="Content\imgareaselect-default.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -182,6 +184,10 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.imgareaselect.js" />
+    <Content Include="Scripts\jquery.imgareaselect.min.js" />
+    <Content Include="Scripts\jquery.imgareaselect.pack.js" />
+    <Content Include="Scripts\jquery.imgnotes-0.1.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -208,6 +214,8 @@
     <Content Include="Views\OCR\Upload.cshtml" />
     <Content Include="Views\OCR\FormListing.cshtml" />
     <Content Include="Views\OCR\FormDetail.cshtml" />
+    <Content Include="Views\OCR\_SystemMessage.cshtml" />
+    <Content Include="Views\OCR\OriginalFile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

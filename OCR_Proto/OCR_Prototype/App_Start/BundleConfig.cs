@@ -23,13 +23,17 @@ namespace OCR_Prototype
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js",
-                      "~/Scripts/custom.js"));
+                      "~/Scripts/custom.js",
+                      "~/Scripts/jquery.unobtrusive-ajax.min.js",
+                      "~/Scripts/jquery.imgareaselect.pack.js",
+                      "~/Scripts/jquery.imgnotes-0.1.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.min.css",
                       "~/Content/Dashboard.css",
                       "~/Content/open-iconic-master/font/css/open-iconic-bootstrap.css",
-                      "~/Content/datatables.min.css"));
+                      "~/Content/datatables.min.css",
+                      "~/Content/imgareaselect-default.css"));
         }
     }
 }
