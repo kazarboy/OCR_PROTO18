@@ -104,7 +104,7 @@ namespace OCR_Prototype.Controllers
                     }
                     else
                     {
-                        //Non Pdf file 
+                        //Shaun : Non Pdf file 
                         docpage.Add(new InsertformInfo
                         {
                             pageNo = 1,
@@ -113,11 +113,12 @@ namespace OCR_Prototype.Controllers
                         });
                     }
 
-                    //Save sourcefile information to DB
+                    //Shaun : Save sourcefile information to DB
                     ResultFormID = imgpath.insertForm(docpage, DocID);
                 }
             }
 
+            //Shaun : Get position for each box position to crop
             if (ResultFormID.Count != 0)
             {
                 OCRModel obj = new OCRModel();
@@ -139,13 +140,14 @@ namespace OCR_Prototype.Controllers
             }
             else
             {
-
+                //Shaun : Exception Handling [TBC]
             }
             //return RedirectToAction("Upload");
             return PartialView("_SystemMessage");
 
         }
 
+        //Shaun : Crop Image and Convert to text for Multipage [currently for pdf format only]
         public void cropImage_ConvertMulti(List<OCRModel.Position> CropPos, List<InsertformInfo> imagePath, string name, List<int> formID, int totalpage)
         {
             OCRModel imgpath = new OCRModel();
@@ -218,6 +220,7 @@ namespace OCR_Prototype.Controllers
             imgpath.InsertCropResult(CropRes);
         }
 
+        //Shaun : Crop Image and Convert to text for single page [currently for jpeg format only]
         public void cropImage_Convert(List<OCRModel.Position> CropPos, string imagePath, string name, int formID)
         {
             OCRModel imgpath = new OCRModel();
@@ -275,6 +278,16 @@ namespace OCR_Prototype.Controllers
 
             return View(getDetailResult.getOriFile(item_id));
 
+        }
+
+        //Shaun : Save Updated text from form detail
+        public ActionResult SaveDetail(List<string> TextCrop, List<string> FormCropID, string refer)
+        {
+            OCRModel UpdateInfoControl = new OCRModel();
+
+            UpdateInfoControl.UpdateDetailInfoModel(TextCrop, FormCropID);
+
+            return RedirectToAction("FormDetail/"+refer);
         }
 
     }
