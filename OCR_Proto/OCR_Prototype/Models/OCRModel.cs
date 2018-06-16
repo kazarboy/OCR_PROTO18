@@ -36,7 +36,8 @@ namespace OCR_Prototype.Models
 
         public class getDetails
         {
-            public int ID { get; set; }
+            public int CropID { get; set; }
+            public int FormID { get; set; }
             public string Reference { get; set; }
             public string Form_Path { get; set; }
             public string Crop_Imgpath { get; set; }
@@ -50,7 +51,6 @@ namespace OCR_Prototype.Models
             public string docpathref { get; set; }
             public string physicalpath { get; set; }
         }
-    
 
         private SqlConnection con;
 
@@ -60,6 +60,7 @@ namespace OCR_Prototype.Models
             con = new SqlConnection(constring);
         }
 
+        //Shaun : retrieve sequence number for form ID
         public string getseqnum()
         {
             string sql = null;
@@ -111,11 +112,12 @@ namespace OCR_Prototype.Models
             return retseq;
         }
 
+        //Shaun : save new form
         public List<int> insertForm(List<InsertformInfo> formpath, int formID)
         {
             DateTime date = DateTime.Now;
             string sql = null;
-            string seq = getseqnum(); 
+            string seq = getseqnum();
 
             List<int> getid = new List<int>();
 
@@ -131,7 +133,7 @@ namespace OCR_Prototype.Models
                     for (int i = 0; i < formpath.Count; i++)
                     {
 
-                        sql = "INSERT INTO Form_Image VALUES (@ImgId,@ImgRef,@Imgpath,@Cre_Date,@Cre_By,@pageno); SELECT SCOPE_IDENTITY()";                       
+                        sql = "INSERT INTO Form_Image VALUES (@ImgId,@ImgRef,@Imgpath,@Cre_Date,@Cre_By,@pageno); SELECT SCOPE_IDENTITY()";
 
 
                         using (SqlCommand cmd = new SqlCommand(sql, conn))
@@ -160,6 +162,7 @@ namespace OCR_Prototype.Models
             return getid;
         }
 
+        //Shaun : retrieve box position fo crop
         public List<Position> retrieveBoxPos(int DocID)
         {
             var BoxID = new List<Position>();
@@ -205,6 +208,7 @@ namespace OCR_Prototype.Models
             return BoxID;
         }
 
+        //Shaun : save all crop and converted text result to DB
         public void InsertCropResult(List<CropResult> CropImageRes)
         {
             DateTime date = DateTime.Now;
@@ -245,6 +249,7 @@ namespace OCR_Prototype.Models
             }
         }
 
+        //Shaun : retrieve all details to display on listing form
         public List<Listing> getListing()
         {
             var ListID = new List<Listing>();
@@ -286,6 +291,7 @@ namespace OCR_Prototype.Models
             }
         }
 
+        //Shaun : retreive the particular information to display on detail form
         public List<getDetails> getDetailList(string FormImgid)
         {
             var DetailList = new List<getDetails>();
@@ -299,7 +305,7 @@ namespace OCR_Prototype.Models
                 try
                 {
                     conn.Open();
-                    sqlBox = "SELECT A.[ID],A.[Form_Reference],A.[pageno],A.[Form_Path],B.[Crop_Imgpath],B.[Crop_Text] FROM [Form_Image] A INNER JOIN [Form_ImageCrop] B ON A.ID = B.FormID_key where A.Form_Reference = '" + FormImgid + "'";
+                    sqlBox = "SELECT B.[ID],A.[ID],A.[Form_Reference],A.[page_no],A.[Form_Path],B.[Crop_Imgpath],B.[Crop_Text] FROM [Form_Image] A INNER JOIN [Form_ImageCrop] B ON A.ID = B.FormID_key where A.Form_Reference = '" + FormImgid + "'";
 
                     using (SqlCommand cmd = new SqlCommand(sqlBox, conn))
                     {
@@ -308,12 +314,13 @@ namespace OCR_Prototype.Models
                         {
                             DetailList.Add(new getDetails
                             {
-                                ID = reader.GetInt32(0),
-                                Reference = reader.GetString(1),
-                                pageno = reader.GetInt32(2),
-                                Form_Path = reader.GetString(3),
-                                Crop_Imgpath = reader.GetString(4),
-                                Crop_Text = reader.GetString(5)
+                                CropID = reader.GetInt32(0),
+                                FormID = reader.GetInt32(1),
+                                Reference = reader.GetString(2),
+                                pageno = reader.GetInt32(3),
+                                Form_Path = reader.GetString(4),
+                                Crop_Imgpath = reader.GetString(5),
+                                Crop_Text = reader.GetString(6)
                             });
                         }
                     }
@@ -353,7 +360,7 @@ namespace OCR_Prototype.Models
                         {
                             DetailList.Add(new getDetails
                             {
-                                ID = reader.GetInt32(0),
+                                FormID = reader.GetInt32(0),
                                 Reference = reader.GetString(1),
                                 Form_Path = reader.GetString(2),
                             });
@@ -369,6 +376,43 @@ namespace OCR_Prototype.Models
                     con.Close();
                 }
                 return DetailList;
+            }
+        }
+
+        //Shaun: save updated text from detail form
+        public void UpdateDetailInfoModel(List<string> TextCrop, List<string> CropID)
+        {
+            string sql = null;
+
+            string constring = ConfigurationManager.ConnectionStrings["OCRDB"].ToString();
+            con = new SqlConnection(constring);
+
+            using (SqlConnection conn = new SqlConnection(constring))
+            {
+                try
+                {
+                    conn.Open();
+
+                    for (int i = 0; i < CropID.Count; i++)
+                    {
+                        sql = "UPDATE Form_ImageCrop SET Crop_TEXT = @Textcrop WHERE ID = @CropID";
+
+                        using (SqlCommand cmd = new SqlCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@Textcrop", TextCrop[i].ToString());
+                            cmd.Parameters.AddWithValue("@CropID", CropID[i]);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ex.ToString();
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
         }
 
