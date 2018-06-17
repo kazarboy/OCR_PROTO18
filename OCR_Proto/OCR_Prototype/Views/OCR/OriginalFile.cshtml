@@ -17,25 +17,28 @@
 
 </head>
 <body>
-    <h2>Uploaded File</h2>
-    @foreach (var item in Model)
-    {
-        <p>
-            <img id="upload-file" src=@Url.Content(item.Form_Path.Replace(" ", "%20")) style="max-width:100%; max-height:100%;" class="img-fluid" />
-        </p>
-    }
+    <div class="container-fluid">
+        <div class="row py-3">
+            <div class="col-md-6"><h3><span class="oi oi-image" title="icon name" aria-hidden="true"></span> Uploaded File</h3></div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-12">
+                @foreach (var item in Model)
+            {
 
-    @*<script type="text/javascript">
-        $(document).ready(function () {
-            notes = [{ "x1": "10", "y1": "10", "height": "150", "width": "50", "note": "This is a note" }, { "x1": "25", "y1": "25", "height": "70", "width": "80", "note": "<b>This</b> is a new note This is another note This is a new note" }];
-            //initial image select
-            $('#upload-file').imgNotes();
-            //$('#upload-file').imgAreaSelect({ x1: 220, y1: 90, x2: 280, y2: 210 });
-        });
-    </script>*@
+                <img id="upload-file" src=@Url.Content(item.Form_Path.Replace(" ", "%20")) style="max-width:100%; max-height:100%;" class="img-fluid" />
+                <hr />
+        }
+            </div>
+        </div>
+        <div class="row py-3">
+            <div class="col-md-12 text-center"><input type="button" value="Close" class="btn btn-outline-primary" onclick="window.close();" /></div>
+        </div>
+    </div>
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/imgselect")
 </body>
 </html>
