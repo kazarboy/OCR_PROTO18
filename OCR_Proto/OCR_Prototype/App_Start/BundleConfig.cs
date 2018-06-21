@@ -10,7 +10,8 @@ namespace OCR_Prototype
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js",
-                        "~/Scripts/datatables.min.js"));
+                        "~/Scripts/datatables.min.js",
+                        "~/Scripts/blazy.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));

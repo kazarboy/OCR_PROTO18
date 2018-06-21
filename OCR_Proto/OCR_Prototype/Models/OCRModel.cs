@@ -351,7 +351,7 @@ namespace OCR_Prototype.Models
                 try
                 {
                     conn.Open();
-                    sqlBox = "SELECT [ID],[Form_Reference],[Form_Path] FROM [Form_Image] where Form_Reference = '" + FormImgid + "'";
+                    sqlBox = "SELECT [ID],[Form_Reference],[Form_Path],[page_no] FROM [Form_Image] where Form_Reference = '" + FormImgid + "'";
 
                     using (SqlCommand cmd = new SqlCommand(sqlBox, conn))
                     {
@@ -363,6 +363,7 @@ namespace OCR_Prototype.Models
                                 FormID = reader.GetInt32(0),
                                 Reference = reader.GetString(1),
                                 Form_Path = reader.GetString(2),
+                                pageno = reader.GetInt32(3)
                             });
                         }
                     }

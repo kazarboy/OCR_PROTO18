@@ -16,29 +16,47 @@
     @Styles.Render("~/Content/hover.css")
 
 </head>
-<body>
-    <div class="container-fluid">
-        <div class="row py-3">
-            <div class="col-md-6"><h3><span class="oi oi-image" title="icon name" aria-hidden="true"></span> Uploaded File</h3></div>
+<body class="bg-light">
 
-        </div>
-        <hr />
-        <div class="row">
-            <div class="col-md-12">
-                @foreach (var item in Model)
+    <header>
+        <nav id="navbar-example2" class="navbar navbar-dark bg-primary fixed-top">
+            <div class="col-md-6"><h5 class="text-light"><span class="oi oi-image" title="icon name" aria-hidden="true"></span> Uploaded File</h5></div>
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link" href="#fat"></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#mdo"></a>
+                </li>
+                <li class="nav-item">
+                    <div class="col-md-12 text-center"><input type="button" value="Close" class="btn btn-light" onclick="window.close();" /></div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <hr />
+    <main role="main" class="container">
+
+        <div class="col-md-12">
+            <br />
+            @foreach (var item in Model)
             {
-
-                <img id="upload-file" src=@Url.Content(item.Form_Path.Replace(" ", "%20")) style="max-width:100%; max-height:100%;" class="img-fluid" />
+                <p class="text-center h4 py-2"><span class="badge badge-info">Page: @item.pageno</span></p>
+                <img id="upload-file" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src=@Url.Content(item.Form_Path.Replace(" ", "%20")) class="b-lazy" />
                 <hr />
-        }
-            </div>
+            }
         </div>
-        <div class="row py-3">
-            <div class="col-md-12 text-center"><input type="button" value="Close" class="btn btn-outline-primary" onclick="window.close();" /></div>
-        </div>
-    </div>
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")
-        @Scripts.Render("~/bundles/imgselect")
+
+    </main>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+
+    <script>
+        ;(function () {
+            var bLazy = new Blazy();
+        })();
+    </script>
 </body>
 </html>
